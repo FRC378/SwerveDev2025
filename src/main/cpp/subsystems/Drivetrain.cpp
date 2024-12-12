@@ -23,9 +23,14 @@ void Drivetrain::Periodic() {}
 void Drivetrain::Drive( double xValue, double yValue, double rValue)
 {
 
-  m_RL.SetTurnMotorPower( rValue);
+  //m_RL.SetTurnMotorPower( rValue);
   m_RL.SetDriveMotorPower( yValue );
 
+  double rlCurrAngle = m_RL.GetTurnEncoderPosition();
+
+  double rlNewAngle = rlCurrAngle + (rValue * 120);
+
+  m_RL.SetTurnAngle(rlNewAngle);
 
 }
 

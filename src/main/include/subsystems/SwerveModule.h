@@ -9,6 +9,7 @@
 
 #include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
+#include <rev/SparkClosedLoopController.h>
 
 #include <frc/AnalogEncoder.h>
 #include <frc/AnalogInput.h>
@@ -21,7 +22,7 @@ class SwerveModule : public frc2::SubsystemBase {
   void Periodic() override;
 
 
-  //Manual Control
+  //Manual Control for testing
   void SetDriveMotorPower( double power);
   void SetTurnMotorPower( double power);  
 
@@ -32,6 +33,7 @@ class SwerveModule : public frc2::SubsystemBase {
   //Turn motor
   void   ResetTurnEncoder(void);
   double GetTurnEncoderPosition(void);
+  void   SetTurnAngle( double angle );
 
   //Drive motor
   void   ResetDriveEncoder(void);
@@ -40,11 +42,13 @@ class SwerveModule : public frc2::SubsystemBase {
 
  private:
 
-  rev::spark::SparkMax             m_driveMotor;
-  rev::spark::SparkRelativeEncoder m_driveEncoder    = m_driveMotor.GetEncoder();
+  rev::spark::SparkMax                  m_driveMotor;
+  rev::spark::SparkRelativeEncoder      m_driveEncoder    = m_driveMotor.GetEncoder();
+  rev::spark::SparkClosedLoopController m_drivePID        = m_driveMotor.GetClosedLoopController();
 
-  rev::spark::SparkMax             m_turnMotor;
-  rev::spark::SparkRelativeEncoder m_turnEncoder     = m_turnMotor.GetEncoder();
+  rev::spark::SparkMax                  m_turnMotor;
+  rev::spark::SparkRelativeEncoder      m_turnEncoder     = m_turnMotor.GetEncoder();
+  rev::spark::SparkClosedLoopController m_turnPID         = m_turnMotor.GetClosedLoopController();
 
 
   frc::AnalogEncoder m_analogEncoder;
