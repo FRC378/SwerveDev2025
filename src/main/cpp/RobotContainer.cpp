@@ -5,8 +5,23 @@
 #include "RobotContainer.h"
 
 #include <frc2/command/Commands.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
-RobotContainer::RobotContainer() {
+#include "commands/CmdDriveWithGamepad.h"
+#include "commands/CmdDriveClearAll.h"
+
+RobotContainer::RobotContainer() 
+{
+
+  //******************** Subsystem Defaults ******************************
+  m_drivetrain.SetDefaultCommand( CmdDriveWithGamepad() );
+
+
+  //******************** Dashboard Buttons *******************************
+  frc::SmartDashboard::PutData( "CmdDriveClearAll",  new CmdDriveClearAll() );
+
+
+
   ConfigureBindings();
 }
 

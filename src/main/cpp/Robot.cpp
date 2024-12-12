@@ -5,21 +5,50 @@
 #include "Robot.h"
 
 #include <frc2/command/CommandScheduler.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
-Robot::Robot() {}
 
-void Robot::RobotPeriodic() {
-  frc2::CommandScheduler::GetInstance().Run();
+RobotContainer robotcontainer;  //Global Variable Object
+
+//Prototypes
+void WriteToSmartDashboard(void);
+
+
+Robot::Robot() 
+{
+  //*************************** INIT ******************************
+  cout<<"RobotInit"<<endl;
+  cout<<"FRC2025Beta: SwerveDriveDev"<<endl;
+  cout<<"Version: " << __DATE__ <<"  "<<__TIME__<<endl<<endl; 
+
+
 }
 
-void Robot::DisabledInit() {}
+void Robot::RobotPeriodic() 
+{
+  frc2::CommandScheduler::GetInstance().Run();
 
-void Robot::DisabledPeriodic() {}
+  WriteToSmartDashboard();
+}
 
-void Robot::DisabledExit() {}
+void Robot::DisabledInit() 
+{
+  cout<<"DisabledInit"<<endl;
+}
 
-void Robot::AutonomousInit() {
-  m_autonomousCommand = m_container.GetAutonomousCommand();
+void Robot::DisabledPeriodic() 
+{
+}
+
+void Robot::DisabledExit() 
+{
+  cout<<"Disabled Exit"<<endl;
+}
+
+void Robot::AutonomousInit() 
+{
+    cout<<"AutonomousInit"<<endl;
+  m_autonomousCommand = robotcontainer.GetAutonomousCommand();
 
   if (m_autonomousCommand) {
     m_autonomousCommand->Schedule();
@@ -28,9 +57,15 @@ void Robot::AutonomousInit() {
 
 void Robot::AutonomousPeriodic() {}
 
-void Robot::AutonomousExit() {}
+void Robot::AutonomousExit() 
+{
+  cout<<"AutonomousExit"<<endl;
+}
 
-void Robot::TeleopInit() {
+void Robot::TeleopInit() 
+{
+  cout<<"TeleopInit"<<endl;
+  
   if (m_autonomousCommand) {
     m_autonomousCommand->Cancel();
   }
@@ -38,14 +73,16 @@ void Robot::TeleopInit() {
 
 void Robot::TeleopPeriodic() {}
 
-void Robot::TeleopExit() {}
+void Robot::TeleopExit() 
+{
+  cout<<"TeleopExit"<<endl;
+}
+
 
 void Robot::TestInit() {
   frc2::CommandScheduler::GetInstance().CancelAll();
 }
-
 void Robot::TestPeriodic() {}
-
 void Robot::TestExit() {}
 
 #ifndef RUNNING_FRC_TESTS
@@ -53,3 +90,19 @@ int main() {
   return frc::StartRobot<Robot>();
 }
 #endif
+
+
+
+void WriteToSmartDashboard(void)
+{
+
+  //XBox Controllers
+  frc::SmartDashboard::PutNumber("Xbox Left-Y",   robotcontainer.m_botDriver.GetLeftY()    ); 
+  frc::SmartDashboard::PutNumber("Xbox Left-X",   robotcontainer.m_botDriver.GetLeftX()    ); 
+  frc::SmartDashboard::PutNumber("Xbox Right-X",  robotcontainer.m_botDriver.GetRightX()   ); 
+
+
+}
+
+
+
