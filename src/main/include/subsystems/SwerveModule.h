@@ -38,7 +38,8 @@ class SwerveModule : public frc2::SubsystemBase {
   //Drive motor
   void   ResetDriveEncoder(void);
   double GetDriveEncoderPosition(void);
-
+  void   SetDriveVelocity( double speed ); //in ft/sec
+  double GetDriveVelocity( void );
 
  private:
 

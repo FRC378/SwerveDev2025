@@ -24,7 +24,9 @@ void Drivetrain::Drive( double xValue, double yValue, double rValue)
 {
 
   //m_RL.SetTurnMotorPower( rValue);
-  m_RL.SetDriveMotorPower( yValue );
+  //m_RL.SetDriveMotorPower( yValue );
+
+  m_RL.SetDriveVelocity(  yValue * 10.0 );
 
   double rlCurrAngle = m_RL.GetTurnEncoderPosition();
 
