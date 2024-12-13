@@ -18,7 +18,7 @@
 
 class SwerveModule : public frc2::SubsystemBase {
  public:
-  SwerveModule(  int driveCanID, int turnCanID, int encoderID, std::string moduleID );
+  SwerveModule(  int driveCanID, int turnCanID, int encoderID, double absEncOffset, std::string moduleID );
 
   void Periodic() override;
 
@@ -26,6 +26,7 @@ class SwerveModule : public frc2::SubsystemBase {
   //Manual Control for testing
   void SetDriveMotorPower( double power);
   void SetTurnMotorPower( double power);  
+  void AlignTurnEncoderToAbsouteEncoder(void);
 
 
   //Swerve State
@@ -34,6 +35,7 @@ class SwerveModule : public frc2::SubsystemBase {
 
   //Absolute Turn Encoder
   double GetTurnEncoderAbsolutePosition(void);
+  double GetTurnEncoderAbsolutePositionRaw(void);
 
   //Turn motor
   void   ResetTurnEncoder(void);
@@ -59,7 +61,7 @@ class SwerveModule : public frc2::SubsystemBase {
 
   frc::AnalogEncoder m_analogEncoder;
 
-
+  double m_absEncOffset;  //Offset of Absolute encoder to actual 0degrees
 
 
   //For Debugging

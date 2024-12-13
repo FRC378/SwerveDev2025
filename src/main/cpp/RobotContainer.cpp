@@ -9,6 +9,7 @@
 
 #include "commands/CmdDriveWithGamepad.h"
 #include "commands/CmdDriveClearAll.h"
+#include "commands/CmdDriveForceTurnAngle.h"
 
 RobotContainer::RobotContainer() 
 {
@@ -19,6 +20,8 @@ RobotContainer::RobotContainer()
 
   //******************** Dashboard Buttons *******************************
   frc::SmartDashboard::PutData( "CmdDriveClearAll",  new CmdDriveClearAll() );
+  frc::SmartDashboard::PutData( "Force 0",   new CmdDriveForceTurnAngle( 0.0  ) );
+  frc::SmartDashboard::PutData( "Force 90",  new CmdDriveForceTurnAngle( 90.0 ) );
 
 
 

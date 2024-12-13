@@ -32,14 +32,15 @@
 #define DRIVE_VELOCITY_MAX     ( (double)15.0) //ft/sec
 
 
-//Kinematics opeates in meters_per_sec.  Convert back to feetPerSec
+//Kinematics operates in meters_per_sec.  Convert back to feetPerSec
 #define MPS2FPS(x)  (x*3.281)
 
 
-SwerveModule::SwerveModule(  int driveCanID, int turnCanID, int encoderID, std::string moduleID ) :
+SwerveModule::SwerveModule(  int driveCanID, int turnCanID, int encoderID, double absEncOffset, std::string moduleID ) :
                 m_driveMotor   (driveCanID, rev::spark::SparkMax::MotorType::kBrushless),
                 m_turnMotor    (turnCanID,  rev::spark::SparkMax::MotorType::kBrushless),
                 m_analogEncoder(encoderID),
+                m_absEncOffset (absEncOffset),
                 m_moduleID     (moduleID)
 {
 
@@ -63,7 +64,7 @@ SwerveModule::SwerveModule(  int driveCanID, int turnCanID, int encoderID, std::
   driveMotorConfig.closedLoop
               .SetFeedbackSensor(rev::spark::ClosedLoopConfig::FeedbackSensor::kPrimaryEncoder)
               .Pid(0.01, 0, 0)
-              .VelocityFF(0.9/DRIVE_VELOCITY_MAX)   //********* THIS NEEDS TO BE CALIBATED ******
+              .VelocityFF(0.9/DRIVE_VELOCITY_MAX)   //********* THIS NEEDS TO BE CALIBRATED ******
               .OutputRange(-0.7, 0.7);
 
   m_driveMotor.Configure( driveMotorConfig,
@@ -106,18 +107,24 @@ void SwerveModule::Periodic()
 {
 
 
+  //-------------
+  //  DebugOutput
+  //-------------
 
-  //DebugOutput
-  frc::SmartDashboard::PutNumber(m_moduleID + "-DrvEnc",    GetDriveEncoderPosition() ); 
+
+  //Turn Encoder
   frc::SmartDashboard::PutNumber(m_moduleID + "-TurnEnc",   GetTurnEncoderPosition() ); 
-
   frc::SmartDashboard::PutNumber(m_moduleID + "-TurnAbs",   GetTurnEncoderAbsolutePosition() );  
+  frc::SmartDashboard::PutNumber(m_moduleID + "-TurnAbsRaw",GetTurnEncoderAbsolutePositionRaw() );  
 
-  frc::SmartDashboard::PutNumber(m_moduleID + "-DrvVel",    GetDriveVelocity()  ); 
+  // //Drive
+  // frc::SmartDashboard::PutNumber(m_moduleID + "-DrvVel",    GetDriveVelocity()  ); 
+  // frc::SmartDashboard::PutNumber(m_moduleID + "-DrvEnc",    GetDriveEncoderPosition() ); 
 
 
-  frc::SmartDashboard::PutNumber(m_moduleID + "-DrvPow",  m_driveMotor.Get() ); 
-  frc::SmartDashboard::PutNumber(m_moduleID + "-TrnPwr",  m_turnMotor.Get()  );
+  // //Powers (when not using PID)
+  // frc::SmartDashboard::PutNumber(m_moduleID + "-DrvPow",  m_driveMotor.Get() ); 
+  // frc::SmartDashboard::PutNumber(m_moduleID + "-TrnPwr",  m_turnMotor.Get()  );
 
 }
 
@@ -156,13 +163,19 @@ double SwerveModule::GetTurnEncoderAbsolutePosition(void)
 {
   //ToDo:  Subtract off offset
   // .get returns range [0,1]
-  return (360.0 * m_analogEncoder.Get()  );
+  return ( (360.0 * m_analogEncoder.Get()) - m_absEncOffset  );
+}
+double SwerveModule::GetTurnEncoderAbsolutePositionRaw(void)
+{
+  //Raw output - used for module calibration
+  return ( 360.0 * m_analogEncoder.Get() );
 }
 
 //---  TURN MOTOR -----
 void   SwerveModule::ResetTurnEncoder(void)
 {
-  m_turnEncoder.SetPosition(0);
+  AlignTurnEncoderToAbsouteEncoder();
+  //m_turnEncoder.SetPosition(0);
 }
 double SwerveModule::GetTurnEncoderPosition(void)
 {
@@ -177,7 +190,10 @@ void   SwerveModule::SetTurnAngle( double angle )
   m_turnPID.SetReference( angle, rev::spark::SparkMax::ControlType::kPosition );
 }
 
-
+void SwerveModule::AlignTurnEncoderToAbsouteEncoder(void )
+{
+  m_turnEncoder.SetPosition(   GetTurnEncoderAbsolutePosition()   );
+}
 
 
 

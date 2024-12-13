@@ -24,6 +24,8 @@ class Drivetrain : public frc2::SubsystemBase {
 
   void Stop( void );
 
+  void ForceAllTurnAngle( double angle );
+
   //Encoders
   void ResetDriveEncoders(void);
   void ResetTurnEncoders(void);
@@ -51,10 +53,10 @@ class Drivetrain : public frc2::SubsystemBase {
   frc::SwerveDriveKinematics<4> m_kinematics{ m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation};
 
 
-
   // FL, FR, BL, BR
+  SwerveModule m_frontLeft;
+  SwerveModule m_frontRight;
   SwerveModule m_backLeft;
-
-
+  SwerveModule m_backRight;
 
 };
