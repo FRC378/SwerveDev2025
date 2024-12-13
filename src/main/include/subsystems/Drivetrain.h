@@ -6,6 +6,12 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include "subsystems/SwerveModule.h"
+#include "RobotConstants.h"
+
+#include <frc/geometry/Translation2d.h>
+#include <frc/kinematics/SwerveDriveKinematics.h>
+#include <frc/kinematics/SwerveDriveOdometry.h>
+
 
 class Drivetrain : public frc2::SubsystemBase {
  public:
@@ -26,8 +32,28 @@ class Drivetrain : public frc2::SubsystemBase {
 
  private:
 
-  // FL, FR, RL, RR
-  SwerveModule m_RL;
+
+  // Coordinates of swerve modules for kinematic and odometry calculations
+  //  Positive x values represent moving toward the front of the robot whereas positive y values represent moving toward the left of the robot.
+  //  
+  //    BL        FL    +Y
+  //     +--------+      ^
+  //     |        >>     |     
+  //     |        >>    -|----> +X
+  //     +--------+      |
+  //    BR        FR
+  //
+  const frc::Translation2d m_frontLeftLocation { units::inch_t{ DRIVEBASE_HEIGHT/2.0},  units::inch_t{ DRIVEBASE_WIDTH/2.0} };
+  const frc::Translation2d m_frontRightLocation{ units::inch_t{ DRIVEBASE_HEIGHT/2.0},  units::inch_t{-DRIVEBASE_WIDTH/2.0} };
+  const frc::Translation2d m_backLeftLocation  { units::inch_t{-DRIVEBASE_HEIGHT/2.0},  units::inch_t{ DRIVEBASE_WIDTH/2.0} };
+  const frc::Translation2d m_backRightLocation { units::inch_t{-DRIVEBASE_HEIGHT/2.0},  units::inch_t{-DRIVEBASE_WIDTH/2.0} };
+
+  frc::SwerveDriveKinematics<4> m_kinematics{ m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation};
+
+
+
+  // FL, FR, BL, BR
+  SwerveModule m_backLeft;
 
 
 

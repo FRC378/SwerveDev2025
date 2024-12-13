@@ -10,6 +10,7 @@
 #include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
 #include <rev/SparkClosedLoopController.h>
+#include <frc/kinematics/SwerveModuleState.h>
 
 #include <frc/AnalogEncoder.h>
 #include <frc/AnalogInput.h>
@@ -26,6 +27,10 @@ class SwerveModule : public frc2::SubsystemBase {
   void SetDriveMotorPower( double power);
   void SetTurnMotorPower( double power);  
 
+
+  //Swerve State
+  void SetDesiredState(frc::SwerveModuleState& state);
+  
 
   //Absolute Turn Encoder
   double GetTurnEncoderAbsolutePosition(void);

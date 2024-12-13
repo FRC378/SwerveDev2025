@@ -6,6 +6,8 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <rev/config/SparkMaxConfig.h>
 
+#include <frc/kinematics/SwerveModuleState.h>
+
 
 //
 //  Swerve Modules is a MK4i L2 with Billet wheels
@@ -28,6 +30,11 @@
 //  velocity = DRIVE_ENCODER_FACTOR / ( ft_per_inch * seconds_per_minute )
 #define DRIVE_VELOCITY_FACTOR  ( (double)( DRIVE_ENCODER_FACTOR / (60.0 * 12.0) ) )  // ft/sec
 #define DRIVE_VELOCITY_MAX     ( (double)15.0) //ft/sec
+
+
+//Kinematics opeates in meters_per_sec.  Convert back to feetPerSec
+#define MPS2FPS(x)  (x*3.281)
+
 
 SwerveModule::SwerveModule(  int driveCanID, int turnCanID, int encoderID, std::string moduleID ) :
                 m_driveMotor   (driveCanID, rev::spark::SparkMax::MotorType::kBrushless),
@@ -55,9 +62,9 @@ SwerveModule::SwerveModule(  int driveCanID, int turnCanID, int encoderID, std::
 
   driveMotorConfig.closedLoop
               .SetFeedbackSensor(rev::spark::ClosedLoopConfig::FeedbackSensor::kPrimaryEncoder)
-              .Pid(0.04, 0, 0)
-              .VelocityFF(1.0/DRIVE_VELOCITY_MAX)
-              .OutputRange(-0.5, 0.5);
+              .Pid(0.01, 0, 0)
+              .VelocityFF(0.9/DRIVE_VELOCITY_MAX)   //********* THIS NEEDS TO BE CALIBATED ******
+              .OutputRange(-0.7, 0.7);
 
   m_driveMotor.Configure( driveMotorConfig,
                           rev::spark::SparkMax::ResetMode::kResetSafeParameters,
@@ -76,8 +83,8 @@ SwerveModule::SwerveModule(  int driveCanID, int turnCanID, int encoderID, std::
 
   turnMotorConfig.closedLoop
               .SetFeedbackSensor(rev::spark::ClosedLoopConfig::FeedbackSensor::kPrimaryEncoder)     //Use internal encoder for PID
-              .Pid( 0.05, 0, 0)
-              .OutputRange(-0.5,0.5)
+              .Pid( 0.01, 0, 0)
+              .OutputRange(-0.7,0.7)
               .PositionWrappingEnabled(true)
               .PositionWrappingInputRange(0,360);
 
@@ -90,6 +97,7 @@ SwerveModule::SwerveModule(  int driveCanID, int turnCanID, int encoderID, std::
 
   //-- Turn Motor Absolute Encoder --
   m_analogEncoder.SetInverted(true);
+
 
 
 }
@@ -124,6 +132,21 @@ void SwerveModule::SetTurnMotorPower( double power)
 {
   m_turnMotor.Set(power);
 } 
+
+
+
+//---  Swerve Modue State Control -----
+void SwerveModule::SetDesiredState(frc::SwerveModuleState& state)
+{
+  //Get Current module angle
+  frc::Rotation2d currTurnAngle{ units::degree_t{ GetTurnEncoderPosition() } };
+
+  //Optimise turn rotation to angle based on requested angle and current angle
+  state.Optimize( currTurnAngle );
+
+  SetDriveVelocity(  MPS2FPS(state.speed() ) ) ;  //Need to convert MetersPerSec back to FeetPerSec
+  SetTurnAngle( state.angle.Degrees().value() );
+}
 
 
 

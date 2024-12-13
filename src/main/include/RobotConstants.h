@@ -10,20 +10,24 @@
 
 //********** DRIVETRAIN CONSTANTS **********
 
+#define DRIVEBASE_WIDTH    20.0       //inches, Left to Right
+#define DRIVEBASE_HEIGHT   20.0       //inches, Front to Rear
+
+
 //-------------------------------------------
-#define FRONT_LEFT_DRIVE_MOTOR_CAN_ID      7 //10
-#define FRONT_LEFT_STEER_MOTOR_CAN_ID      8 //11
-#define FRONT_LEFT_STEER_ENCODER_CAN_ID    9 //12
+#define FRONTLEFT_DRIVE_CAN_ID      11 
+#define FRONTLEFT_TURN_CAN_ID       12 
+#define FRONTLEFT_ENCODER_CAN_ID    0 
 //-------------------------------------------
-#define FRONT_RIGHT_DRIVE_MOTOR_CAN_ID     1 //4
-#define FRONT_RIGHT_STEER_MOTOR_CAN_ID     2 //5
-#define FRONT_RIGHT_STEER_ENCODER_CAN_ID   3 //6
+#define FRONTRIGHT_DRIVE_CAN_ID     21
+#define FRONTRIGHT_TURN_CAN_ID      22
+#define FRONTRIGHT_ENCODER_CAN_ID   1
 //-------------------------------------------
-#define RL_DRIVE_CAN_ID     14
-#define RL_TURN_CAN_ID      24
-#define RL_ENCODER_ID       3
+#define BACKLEFT_DRIVE_CAN_ID       14
+#define BACKLEFT_TURN_CAN_ID        24
+#define BACKLEFT_ENCODER_ID         3
 //-------------------------------------------
-#define RR_DRIVE_CAN_ID     1
-#define RR_TURN_CAN_ID      2
-#define RR_ENCODER_ID       3
+#define BACKRIGHT_DRIVE_CAN_ID      31
+#define BACKRIGHT_TURN_CAN_ID       32
+#define BACKRIGHT_ENCODER_ID        2
 //-------------------------------------------
