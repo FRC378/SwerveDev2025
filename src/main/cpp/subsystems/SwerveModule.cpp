@@ -5,6 +5,7 @@
 #include "subsystems/SwerveModule.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <rev/config/SparkMaxConfig.h>
+#include <cmath>
 
 #include <frc/kinematics/SwerveModuleState.h>
 
@@ -35,6 +36,13 @@
 //Kinematics operates in meters_per_sec.  Convert back to feetPerSec
 #define MPS2FPS(x)  (x*3.281)
 
+//Function to bound turn encoder position to positive [0-360] degrees
+double BoundDegrees(double angle)
+{
+  double fmodAngle = fmod(angle,360.0);
+  return fmodAngle<0?(fmodAngle+360.0):fmodAngle;
+}
+
 
 SwerveModule::SwerveModule(  int driveCanID, int turnCanID, int encoderID, double absEncOffset, std::string moduleID ) :
                 m_driveMotor   (driveCanID, rev::spark::SparkMax::MotorType::kBrushless),
@@ -54,7 +62,8 @@ SwerveModule::SwerveModule(  int driveCanID, int turnCanID, int encoderID, doubl
   driveMotorConfig
               .SetIdleMode(rev::spark::SparkBaseConfig::IdleMode::kBrake)
               .SmartCurrentLimit(50)
-              .Inverted(false);
+              .Inverted(false)
+              .ClosedLoopRampRate(0.3);
 
 
   driveMotorConfig.encoder
@@ -65,7 +74,7 @@ SwerveModule::SwerveModule(  int driveCanID, int turnCanID, int encoderID, doubl
               .SetFeedbackSensor(rev::spark::ClosedLoopConfig::FeedbackSensor::kPrimaryEncoder)
               .Pid(0.01, 0, 0)
               .VelocityFF(0.9/DRIVE_VELOCITY_MAX)   //********* THIS NEEDS TO BE CALIBRATED ******
-              .OutputRange(-0.7, 0.7);
+              .OutputRange(-.95, 0.95);
 
   m_driveMotor.Configure( driveMotorConfig,
                           rev::spark::SparkMax::ResetMode::kResetSafeParameters,
@@ -76,7 +85,8 @@ SwerveModule::SwerveModule(  int driveCanID, int turnCanID, int encoderID, doubl
   turnMotorConfig
               .SetIdleMode(rev::spark::SparkBaseConfig::IdleMode::kBrake)
               .SmartCurrentLimit(20)
-              .Inverted(false);
+              .Inverted(true) //Positive = CCW Rotation
+              .ClosedLoopRampRate(0.1);
 
   turnMotorConfig.encoder
               .PositionConversionFactor( TURN_ENCODER_FACTOR )
@@ -97,7 +107,7 @@ SwerveModule::SwerveModule(  int driveCanID, int turnCanID, int encoderID, doubl
 
 
   //-- Turn Motor Absolute Encoder --
-  m_analogEncoder.SetInverted(true);
+  m_analogEncoder.SetInverted(false);
 
 
 
@@ -161,14 +171,15 @@ void SwerveModule::SetDesiredState(frc::SwerveModuleState& state)
 //---  ABSOLUTE TURN ENCODER -----
 double SwerveModule::GetTurnEncoderAbsolutePosition(void)
 {
-  //ToDo:  Subtract off offset
-  // .get returns range [0,1]
-  return ( (360.0 * m_analogEncoder.Get()) - m_absEncOffset  );
+  // Offset Corrected position 
+  return BoundDegrees( (360.0 * m_analogEncoder.Get()) - m_absEncOffset  );
+  // Encoder.get returns range [0,1], multiply by 360 for degrees
 }
 double SwerveModule::GetTurnEncoderAbsolutePositionRaw(void)
 {
-  //Raw output - used for module calibration
+  //Raw encoder output - used for module calibration
   return ( 360.0 * m_analogEncoder.Get() );
+  // Encoder.get returns range [0,1], multiply by 360 for degrees
 }
 
 //---  TURN MOTOR -----
@@ -179,7 +190,8 @@ void   SwerveModule::ResetTurnEncoder(void)
 }
 double SwerveModule::GetTurnEncoderPosition(void)
 {
-  return m_turnEncoder.GetPosition();
+  return BoundDegrees( m_turnEncoder.GetPosition() );
+  //return m_turnEncoder.GetPosition(); //Return +/- infinite degress
 }
 
 //Set Turn Angle
@@ -212,7 +224,7 @@ double SwerveModule::GetDriveEncoderPosition(void)
 // Uses SparkMax internal PID
 void SwerveModule::SetDriveVelocity( double speed )
 {
-  frc::SmartDashboard::PutNumber(m_moduleID + "-DrvRef",    speed  ); 
+  //frc::SmartDashboard::PutNumber(m_moduleID + "-DrvRef",    speed  ); 
   m_drivePID.SetReference(speed, rev::spark::SparkMax::ControlType::kVelocity );
 }
 double SwerveModule::GetDriveVelocity( void )

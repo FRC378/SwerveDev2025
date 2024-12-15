@@ -22,19 +22,11 @@ Drivetrain::Drivetrain() :
         m_backRight { BACKRIGHT_DRIVE_CAN_ID,  BACKRIGHT_TURN_CAN_ID,  BACKRIGHT_ENCODER_ID,  BACKRIGHT_ENCODER_OFFSET,  "BR"}
 {
 
-
-
-
-
-  std::cout << "DriveTrain...." << std::endl;
-
-  std::cout << "FL" << m_frontLeftLocation.X().value()  << " " << m_frontLeftLocation.Y().value()  << std::endl;
-  std::cout << "FR" << m_frontRightLocation.X().value() << " " << m_frontRightLocation.Y().value() << std::endl;
-  std::cout << "BL" << m_backLeftLocation.X().value()   << " " << m_backLeftLocation.Y().value()   << std::endl;
-  std::cout << "BR" << m_backRightLocation.X().value()  << " " << m_backRightLocation.Y().value()  << std::endl;
-
-
+  std::cout << "DriveTrain Starting" << std::endl;
   publisher = nt::NetworkTableInstance::GetDefault().GetStructArrayTopic<frc::SwerveModuleState>("/SwerveStates").Publish();
+
+
+
 
 }
 
@@ -67,20 +59,12 @@ void Drivetrain::Drive( double xValue, double yValue, double rValue)
   auto [fl, fr, bl, br] = states;
 
   //Set Desired States
-  m_frontLeft.SetDesiredState(  fr );
-  m_frontRight.SetDesiredState( fl );
-  m_backLeft.SetDesiredState(   br );
-  m_backRight.SetDesiredState(  bl );
+  m_frontLeft.SetDesiredState(  fl );
+  m_frontRight.SetDesiredState( fr );
+  m_backLeft.SetDesiredState(   bl );
+  m_backRight.SetDesiredState(  br );
 
-
-    publisher.Set(
-      std::vector{
-        fl,
-        fr,
-        bl,
-        br
-      }
-    );
+  publisher.Set(std::vector{ fl,fr,bl,br});
 
 
 /*

@@ -30,8 +30,10 @@ void CmdDriveWithGamepad::Execute()
   // double rightX = robotcontainer.m_botDriver.GetRightX();
 
   double leftY  = -frc::ApplyDeadband( robotcontainer.m_botDriver.GetLeftY(),  DEADBAND, 1.0 );  //invert: Positive is forward
-  double leftX  =  frc::ApplyDeadband( robotcontainer.m_botDriver.GetLeftX(),  DEADBAND, 1.0 );  //invert: Positive is left
-  double rightX =  frc::ApplyDeadband( robotcontainer.m_botDriver.GetRightX(), DEADBAND, 1.0 );
+  double leftX  = -frc::ApplyDeadband( robotcontainer.m_botDriver.GetLeftX(),  DEADBAND, 1.0 );  //invert: Positive is left
+  double rightX = -frc::ApplyDeadband( robotcontainer.m_botDriver.GetRightX(), DEADBAND, 1.0 );  //Invert: Positive is CCW
+
+
 
   //WPILib kinematics uses X-axis as forward, and Y-axis sideways.  Swap joystick inputs when calling Drive
   robotcontainer.m_drivetrain.Drive(leftY, leftX, rightX );

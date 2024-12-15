@@ -22,6 +22,12 @@ Robot::Robot()
   cout<<"Version: " << __DATE__ <<"  "<<__TIME__<<endl<<endl; 
 
 
+
+  //Robot Initialization
+  robotcontainer.m_drivetrain.ResetDriveEncoders();
+  robotcontainer.m_drivetrain.ResetTurnEncoders();
+
+
 }
 
 void Robot::RobotPeriodic() 
