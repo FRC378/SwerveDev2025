@@ -11,6 +11,7 @@
 #include <frc/geometry/Translation2d.h>
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/kinematics/SwerveDriveOdometry.h>
+#include <frc/kinematics/SwerveModulePosition.h>
 
 
 class Drivetrain : public frc2::SubsystemBase {
@@ -29,6 +30,13 @@ class Drivetrain : public frc2::SubsystemBase {
   //Encoders
   void ResetDriveEncoders(void);
   void ResetTurnEncoders(void);
+
+  //Odometry
+  void ResetOdometry(void);
+  double GetOdometryX(void);
+  double GetOdometryY(void);
+  double GetOdometryHeading(void);
+
 
 
 
@@ -58,5 +66,11 @@ class Drivetrain : public frc2::SubsystemBase {
   SwerveModule m_frontRight;
   SwerveModule m_backLeft;
   SwerveModule m_backRight;
+
+  //Odometry
+  frc::SwerveDriveOdometry<4> m_odometry {  m_kinematics,
+                                            frc::Rotation2d{},
+                                            { m_frontLeft.GetPosition(),m_frontRight.GetPosition(),m_backLeft.GetPosition(),m_backRight.GetPosition()  }
+                                          };
 
 };

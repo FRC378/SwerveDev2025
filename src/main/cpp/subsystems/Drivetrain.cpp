@@ -12,6 +12,7 @@
 static constexpr units::feet_per_second_t    kMaxVelocity = units::feet_per_second_t{  3.0 };
 static constexpr units::degrees_per_second_t kMaxRotation = units::degrees_per_second_t{ 125 }; 
 
+#define METER2INCH(x) (x*39.3701)
 
 nt::StructArrayPublisher<frc::SwerveModuleState> publisher;
 
@@ -33,6 +34,11 @@ Drivetrain::Drivetrain() :
 // This method will be called once per scheduler run
 void Drivetrain::Periodic() 
 {
+
+  //Odometry
+  m_odometry.Update( frc::Rotation2d{} ,
+                    {m_frontLeft.GetPosition(), m_frontRight.GetPosition(), m_backLeft.GetPosition(), m_backRight.GetPosition()});
+
 
 }
 
@@ -121,3 +127,37 @@ void Drivetrain::Drive( double xValue, double yValue, double rValue)
     m_backLeft.ResetTurnEncoder();
     m_backRight.ResetTurnEncoder();
   }
+
+
+
+
+  // --- Odometry ---
+  void Drivetrain::ResetOdometry(void)
+  {
+    //Reset to (0,0)
+    m_odometry.ResetPosition (  frc::Rotation2d{},
+                                {frc::SwerveModulePosition{},frc::SwerveModulePosition{},frc::SwerveModulePosition{},frc::SwerveModulePosition{} },
+                                frc::Pose2d{}
+                              );
+
+  }
+  double Drivetrain::GetOdometryX(void)
+  {
+    return METER2INCH( m_odometry.GetPose().X().value() );
+  }
+  double Drivetrain::GetOdometryY(void)
+  {
+    return METER2INCH( m_odometry.GetPose().Y().value() );
+  }
+  double Drivetrain::GetOdometryHeading(void)
+  {
+    return 0;
+  }
+
+
+
+
+
+
+
+

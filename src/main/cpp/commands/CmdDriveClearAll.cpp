@@ -14,7 +14,7 @@ void CmdDriveClearAll::Initialize()
 
   robotcontainer.m_drivetrain.ResetDriveEncoders();
   robotcontainer.m_drivetrain.ResetTurnEncoders();
-  
+  robotcontainer.m_drivetrain.ResetOdometry();
 }
 
 

@@ -26,6 +26,7 @@ Robot::Robot()
   //Robot Initialization
   robotcontainer.m_drivetrain.ResetDriveEncoders();
   robotcontainer.m_drivetrain.ResetTurnEncoders();
+  robotcontainer.m_drivetrain.ResetOdometry();
 
 
 }
@@ -106,6 +107,14 @@ void WriteToSmartDashboard(void)
   frc::SmartDashboard::PutNumber("Xbox Left-Y",   robotcontainer.m_botDriver.GetLeftY()    ); 
   frc::SmartDashboard::PutNumber("Xbox Left-X",   robotcontainer.m_botDriver.GetLeftX()    ); 
   frc::SmartDashboard::PutNumber("Xbox Right-X",  robotcontainer.m_botDriver.GetRightX()   ); 
+
+
+
+
+  //Odometry
+  frc::SmartDashboard::PutNumber( "odoX",  robotcontainer.m_drivetrain.GetOdometryX() ); 
+  frc::SmartDashboard::PutNumber( "odoY",  robotcontainer.m_drivetrain.GetOdometryY() ); 
+  frc::SmartDashboard::PutNumber( "odoH",  robotcontainer.m_drivetrain.GetOdometryHeading() ); 
 
 
 }

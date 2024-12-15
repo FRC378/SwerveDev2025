@@ -11,6 +11,7 @@
 #include <rev/SparkRelativeEncoder.h>
 #include <rev/SparkClosedLoopController.h>
 #include <frc/kinematics/SwerveModuleState.h>
+#include <frc/kinematics/SwerveModulePosition.h>
 
 #include <frc/AnalogEncoder.h>
 #include <frc/AnalogInput.h>
@@ -31,6 +32,8 @@ class SwerveModule : public frc2::SubsystemBase {
 
   //Swerve State
   void SetDesiredState(frc::SwerveModuleState& state);
+  
+  frc::SwerveModulePosition GetPosition() const;
   
 
   //Absolute Turn Encoder

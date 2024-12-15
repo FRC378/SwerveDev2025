@@ -94,8 +94,8 @@ SwerveModule::SwerveModule(  int driveCanID, int turnCanID, int encoderID, doubl
 
   turnMotorConfig.closedLoop
               .SetFeedbackSensor(rev::spark::ClosedLoopConfig::FeedbackSensor::kPrimaryEncoder)     //Use internal encoder for PID
-              .Pid( 0.01, 0, 0)
-              .OutputRange(-0.7,0.7)
+              .Pid( 0.015, 0, 0)
+              .OutputRange(-0.5,0.5)
               .PositionWrappingEnabled(true)
               .PositionWrappingInputRange(0,360);
 
@@ -129,7 +129,7 @@ void SwerveModule::Periodic()
 
   // //Drive
   // frc::SmartDashboard::PutNumber(m_moduleID + "-DrvVel",    GetDriveVelocity()  ); 
-  // frc::SmartDashboard::PutNumber(m_moduleID + "-DrvEnc",    GetDriveEncoderPosition() ); 
+  frc::SmartDashboard::PutNumber(m_moduleID + "-DrvEnc",    GetDriveEncoderPosition() ); 
 
 
   // //Powers (when not using PID)
@@ -163,6 +163,12 @@ void SwerveModule::SetDesiredState(frc::SwerveModuleState& state)
 
   SetDriveVelocity(  MPS2FPS(state.speed() ) ) ;  //Need to convert MetersPerSec back to FeetPerSec
   SetTurnAngle( state.angle.Degrees().value() );
+}
+
+frc::SwerveModulePosition SwerveModule::GetPosition() const 
+{
+  return {units::meter_t{  units::inch_t{    m_driveEncoder.GetPosition() } },
+          units::radian_t{ units::degree_t{  m_turnEncoder.GetPosition()  }  } };
 }
 
 
