@@ -92,13 +92,17 @@ void Drivetrain::Drive( double xValue, double yValue, double rValue)
   void Drivetrain::ForceAllTurnAngle( double angle )
   {
 
-    frc::SwerveModuleState state = {0_mps, frc::Rotation2d{ units::degree_t{ angle} } };
+    //Turn modules to an angle without using wpilib kinematics optimize feature
+    m_frontLeft.SetTurnAngle( angle );
+    m_frontRight.SetTurnAngle( angle );
+    m_backLeft.SetTurnAngle( angle );
+    m_backRight.SetTurnAngle( angle );
 
-    m_frontLeft.SetDesiredState(  state  ); 
-    m_frontRight.SetDesiredState(  state  ); 
-    m_backLeft.SetDesiredState(  state  ); 
-    m_backRight.SetDesiredState(  state  ); 
-
+    // frc::SwerveModuleState state = {0_mps, frc::Rotation2d{ units::degree_t{ angle} } };
+    // m_frontLeft.SetDesiredState(  state  ); 
+    // m_frontRight.SetDesiredState(  state  ); 
+    // m_backLeft.SetDesiredState(  state  ); 
+    // m_backRight.SetDesiredState(  state  ); 
   }
 
 
