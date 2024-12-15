@@ -40,6 +40,10 @@ void Drivetrain::Periodic()
                     {m_frontLeft.GetPosition(), m_frontRight.GetPosition(), m_backLeft.GetPosition(), m_backRight.GetPosition()});
 
 
+  //Gyro Testing
+  frc::SmartDashboard::PutNumber("GyroAngle",   gyro.GetAngle()   );  //Depricated
+
+  frc::SmartDashboard::PutNumber("GyroYaw",    gyro.GetYaw().GetValue().value()   );
 }
 
 
