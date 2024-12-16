@@ -5,6 +5,7 @@
 #include "commands/CmdDriveWithGamepad.h"
 #include "Robot.h"
 #include <frc/MathUtil.h>
+#include "subsystems/Drivetrain.h"
 
 CmdDriveWithGamepad::CmdDriveWithGamepad()
 {
@@ -36,7 +37,7 @@ void CmdDriveWithGamepad::Execute()
 
 
   //WPILib kinematics uses X-axis as forward, and Y-axis sideways.  Swap joystick inputs when calling Drive
-  robotcontainer.m_drivetrain.Drive(leftY, leftX, rightX );
+  robotcontainer.m_drivetrain.Drive(leftY, leftX, rightX, Drivetrain::ROBOTCENTRIC );
 
 }
 

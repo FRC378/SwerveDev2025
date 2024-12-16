@@ -24,9 +24,10 @@ Drivetrain::Drivetrain() :
 {
 
   std::cout << "DriveTrain Starting" << std::endl;
+  
   publisher = nt::NetworkTableInstance::GetDefault().GetStructArrayTopic<frc::SwerveModuleState>("/SwerveStates").Publish();
-
-
+  
+  m_driveType = FIELDCENTRIC;
 
 
 }
@@ -36,19 +37,15 @@ void Drivetrain::Periodic()
 {
 
   //Odometry
-  m_odometry.Update( frc::Rotation2d{} ,
+  m_odometry.Update( m_gyro.GetRotation2d()  ,
                     {m_frontLeft.GetPosition(), m_frontRight.GetPosition(), m_backLeft.GetPosition(), m_backRight.GetPosition()});
 
 
-  //Gyro Testing
-  frc::SmartDashboard::PutNumber("GyroAngle",   gyro.GetAngle()   );  //Depricated
-
-  frc::SmartDashboard::PutNumber("GyroYaw",    gyro.GetYaw().GetValue().value()   );
 }
 
 
 
-void Drivetrain::Drive( double xValue, double yValue, double rValue)
+void Drivetrain::Drive( double xValue, double yValue, double rValue, driveType drivetype )
 {
 
 
@@ -60,8 +57,12 @@ void Drivetrain::Drive( double xValue, double yValue, double rValue)
   //The singular voodoo magic call to calculate all the nasty swerve math!
   // *** NOTE *** state velocities are conveterd to Meters per Second!!!!!!
   // *** NOTE *** kinematics defines positive X-Axis as forward,  positive y-axis is left  (See kinematic instantiation in Drivetrain.h)
-  auto states = m_kinematics.ToSwerveModuleStates( frc::ChassisSpeeds{xSpeed, ySpeed, rSpeed} );
-
+  auto states = m_kinematics.ToSwerveModuleStates( 
+                    (drivetype == ROBOTCENTRIC)
+                    ? frc::ChassisSpeeds{xSpeed, ySpeed, rSpeed}                                                      //RobotCentric
+                    : frc::ChassisSpeeds::FromFieldRelativeSpeeds(xSpeed, ySpeed, rSpeed, m_gyro.GetRotation2d() )    //FieldCentric
+                    );
+    
   //Normalize velocities
   m_kinematics.DesaturateWheelSpeeds(&states, kMaxVelocity);
 
@@ -102,17 +103,22 @@ void Drivetrain::Drive( double xValue, double yValue, double rValue)
   void Drivetrain::ForceAllTurnAngle( double angle )
   {
 
-    //Turn modules to an angle without using wpilib kinematics optimize feature
-    m_frontLeft.SetTurnAngle( angle );
-    m_frontRight.SetTurnAngle( angle );
-    m_backLeft.SetTurnAngle( angle );
-    m_backRight.SetTurnAngle( angle );
+    // //Turn modules to an angle without using wpilib kinematics optimize feature
+    // m_frontLeft.SetTurnAngle( angle );
+    // m_frontRight.SetTurnAngle( angle );
+    // m_backLeft.SetTurnAngle( angle );
+    // m_backRight.SetTurnAngle( angle );
 
-    // frc::SwerveModuleState state = {0_mps, frc::Rotation2d{ units::degree_t{ angle} } };
+    //frc::SwerveModuleState state = {0_mps, frc::Rotation2d{ units::degree_t{ angle} } };
     // m_frontLeft.SetDesiredState(  state  ); 
     // m_frontRight.SetDesiredState(  state  ); 
     // m_backLeft.SetDesiredState(  state  ); 
     // m_backRight.SetDesiredState(  state  ); 
+
+    // "Sets" the rotational angle of each module when kinematics routiene runs
+    frc::Rotation2d rot{ units::degree_t{ angle }};
+    m_kinematics.ResetHeadings( {rot,rot,rot,rot} );
+
   }
 
 
@@ -134,11 +140,26 @@ void Drivetrain::Drive( double xValue, double yValue, double rValue)
 
 
 
+  // --- Gyro ---
+  bool   Drivetrain::IsGyroConnected(void)
+  {
+    return m_gyro.IsConnected();
+  }
+  double Drivetrain::GetGyroYaw(void)            //yaw: Relative -180 to +180
+  {
+    return m_gyro.GetYaw().GetValue().value();
+  }
+  void   Drivetrain::ZeroGyro(void)
+  {
+    m_gyro.SetYaw( units::degree_t{0} );
+  }
+
 
   // --- Odometry ---
   void Drivetrain::ResetOdometry(void)
   {
     //Reset to (0,0)
+    // ** This needs to be fixed.  Seems like there is some state storage in odometry, and this does not fully clear it
     m_odometry.ResetPosition (  frc::Rotation2d{},
                                 {frc::SwerveModulePosition{},frc::SwerveModulePosition{},frc::SwerveModulePosition{},frc::SwerveModulePosition{} },
                                 frc::Pose2d{}
@@ -155,9 +176,19 @@ void Drivetrain::Drive( double xValue, double yValue, double rValue)
   }
   double Drivetrain::GetOdometryHeading(void)
   {
-    return 0;
+    return GetGyroYaw();
   }
 
+
+
+void Drivetrain::SetDriveType( driveType type )
+{
+    m_driveType = type;
+}
+Drivetrain::driveType Drivetrain::GetDriveType( void )
+{
+    return m_driveType;
+}
 
 
 

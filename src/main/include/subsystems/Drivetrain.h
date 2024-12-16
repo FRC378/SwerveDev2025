@@ -22,8 +22,13 @@ class Drivetrain : public frc2::SubsystemBase {
   void Periodic() override;
 
 
+  enum driveType { ROBOTCENTRIC, FIELDCENTRIC };
+  void SetDriveType( driveType type );
+  driveType GetDriveType( void );
+
+
   //Drive Controls
-  void Drive( double xValue, double yValue, double rValue);
+  void Drive( double xValue, double yValue, double rValue, driveType drivetype);
 
   void Stop( void );
 
@@ -33,8 +38,15 @@ class Drivetrain : public frc2::SubsystemBase {
   void ResetDriveEncoders(void);
   void ResetTurnEncoders(void);
 
+
+  //Gyro
+  bool   IsGyroConnected(void);
+  double GetGyroYaw(void);            //yaw: Relative -180 to +180
+  void   ZeroGyro(void);
+
+
   //Odometry
-  void ResetOdometry(void);
+  void   ResetOdometry(void);
   double GetOdometryX(void);
   double GetOdometryY(void);
   double GetOdometryHeading(void);
@@ -76,6 +88,8 @@ class Drivetrain : public frc2::SubsystemBase {
                                           };
 
 
-  ctre::phoenix6::hardware::Pigeon2 gyro{ PIGEON_CAN_ID, "rio"};
+  ctre::phoenix6::hardware::Pigeon2 m_gyro{ PIGEON_CAN_ID, "rio"};
+
+  driveType m_driveType;  
 
 };

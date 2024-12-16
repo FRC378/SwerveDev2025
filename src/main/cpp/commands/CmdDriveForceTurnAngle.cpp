@@ -23,18 +23,18 @@ void CmdDriveForceTurnAngle::Execute() {}
 
 void CmdDriveForceTurnAngle::End(bool interrupted) 
 {
-  robotcontainer.m_drivetrain.Stop();
+  //robotcontainer.m_drivetrain.Stop();
 }
 
 
 bool CmdDriveForceTurnAngle::IsFinished() 
 {
+  return true; //Immediate if using ResetHeadings
+  // if ( m_timer.HasElapsed( units::second_t( 2.0 )  ) )
+  // {
+  //   m_timer.Stop();
+  //   return true;
+  // }
 
-  if ( m_timer.HasElapsed( units::second_t( 2.0 )  ) )
-  {
-    m_timer.Stop();
-    return true;
-  }
-
-  return false;
+  // return false;
 }

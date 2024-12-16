@@ -110,6 +110,11 @@ void WriteToSmartDashboard(void)
 
 
 
+  //Gyro
+  frc::SmartDashboard::PutBoolean("Gyro_IsConn",  robotcontainer.m_drivetrain.IsGyroConnected() );
+  frc::SmartDashboard::PutNumber( "Gyro_Yaw",     robotcontainer.m_drivetrain.GetGyroYaw() ); 
+
+
 
   //Odometry
   frc::SmartDashboard::PutNumber( "odoX",  robotcontainer.m_drivetrain.GetOdometryX() ); 
