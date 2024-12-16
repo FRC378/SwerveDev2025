@@ -95,89 +95,88 @@ void Drivetrain::Drive( double xValue, double yValue, double rValue, driveType d
 
 
 
-  void Drivetrain::Stop( void )
-  {
+void Drivetrain::Stop( void )
+{
 
-  }
+}
 
-  void Drivetrain::ForceAllTurnAngle( double angle )
-  {
+void Drivetrain::ForceAllTurnAngle( double angle )
+{
+  // "Sets" the rotational angle of each module when kinematics routiene runs
+  frc::Rotation2d rot{ units::degree_t{ angle }};
+  m_kinematics.ResetHeadings( {rot,rot,rot,rot} );
 
-    // //Turn modules to an angle without using wpilib kinematics optimize feature
-    // m_frontLeft.SetTurnAngle( angle );
-    // m_frontRight.SetTurnAngle( angle );
-    // m_backLeft.SetTurnAngle( angle );
-    // m_backRight.SetTurnAngle( angle );
+}
 
-    //frc::SwerveModuleState state = {0_mps, frc::Rotation2d{ units::degree_t{ angle} } };
-    // m_frontLeft.SetDesiredState(  state  ); 
-    // m_frontRight.SetDesiredState(  state  ); 
-    // m_backLeft.SetDesiredState(  state  ); 
-    // m_backRight.SetDesiredState(  state  ); 
-
-    // "Sets" the rotational angle of each module when kinematics routiene runs
-    frc::Rotation2d rot{ units::degree_t{ angle }};
-    m_kinematics.ResetHeadings( {rot,rot,rot,rot} );
-
-  }
-
-
-  //Encoders
-  void Drivetrain::ResetDriveEncoders(void)
-  {
-    m_frontLeft.ResetDriveEncoder();
-    m_frontRight.ResetDriveEncoder();
-    m_backLeft.ResetDriveEncoder();
-    m_backRight.ResetDriveEncoder();
-  }
-  void Drivetrain::ResetTurnEncoders(void)
-  {
-    m_frontLeft.ResetTurnEncoder();
-    m_frontRight.ResetTurnEncoder();
-    m_backLeft.ResetTurnEncoder();
-    m_backRight.ResetTurnEncoder();
-  }
+void Drivetrain::ForcePark( void )
+{
+  // "Sets" the rotational angle of each module when kinematics routiene runs
+  m_kinematics.ResetHeadings( { frc::Rotation2d(  units::degree_t{ -45 } ),   //FL      
+                                frc::Rotation2d(  units::degree_t{  45 } ),   //FR
+                                frc::Rotation2d(  units::degree_t{  45 } ),   //BL
+                                frc::Rotation2d(  units::degree_t{ -45 } )    //br
+                              } 
+                            );
+}
 
 
 
-  // --- Gyro ---
-  bool   Drivetrain::IsGyroConnected(void)
-  {
-    return m_gyro.IsConnected();
-  }
-  double Drivetrain::GetGyroYaw(void)            //yaw: Relative -180 to +180
-  {
-    return m_gyro.GetYaw().GetValue().value();
-  }
-  void   Drivetrain::ZeroGyro(void)
-  {
-    m_gyro.SetYaw( units::degree_t{0} );
-  }
+//Encoders
+void Drivetrain::ResetDriveEncoders(void)
+{
+  m_frontLeft.ResetDriveEncoder();
+  m_frontRight.ResetDriveEncoder();
+  m_backLeft.ResetDriveEncoder();
+  m_backRight.ResetDriveEncoder();
+}
+void Drivetrain::ResetTurnEncoders(void)
+{
+  m_frontLeft.ResetTurnEncoder();
+  m_frontRight.ResetTurnEncoder();
+  m_backLeft.ResetTurnEncoder();
+  m_backRight.ResetTurnEncoder();
+}
 
 
-  // --- Odometry ---
-  void Drivetrain::ResetOdometry(void)
-  {
-    //Reset to (0,0)
-    // ** This needs to be fixed.  Seems like there is some state storage in odometry, and this does not fully clear it
-    m_odometry.ResetPosition (  frc::Rotation2d{},
-                                {frc::SwerveModulePosition{},frc::SwerveModulePosition{},frc::SwerveModulePosition{},frc::SwerveModulePosition{} },
-                                frc::Pose2d{}
-                              );
 
-  }
-  double Drivetrain::GetOdometryX(void)
-  {
-    return METER2INCH( m_odometry.GetPose().X().value() );
-  }
-  double Drivetrain::GetOdometryY(void)
-  {
-    return METER2INCH( m_odometry.GetPose().Y().value() );
-  }
-  double Drivetrain::GetOdometryHeading(void)
-  {
-    return GetGyroYaw();
-  }
+// --- Gyro ---
+bool   Drivetrain::IsGyroConnected(void)
+{
+  return m_gyro.IsConnected();
+}
+double Drivetrain::GetGyroYaw(void)            //yaw: Relative -180 to +180
+{
+  return m_gyro.GetYaw().GetValue().value();
+}
+void   Drivetrain::ZeroGyro(void)
+{
+  m_gyro.SetYaw( units::degree_t{0} );
+}
+
+
+// --- Odometry ---
+void Drivetrain::ResetOdometry(void)
+{
+  //Reset to (0,0)
+  // ** This needs to be fixed.  Seems like there is some state storage in odometry, and this does not fully clear it
+  m_odometry.ResetPosition (  frc::Rotation2d{},
+                              {frc::SwerveModulePosition{},frc::SwerveModulePosition{},frc::SwerveModulePosition{},frc::SwerveModulePosition{} },
+                              frc::Pose2d{}
+                            );
+
+}
+double Drivetrain::GetOdometryX(void)
+{
+  return METER2INCH( m_odometry.GetPose().X().value() );
+}
+double Drivetrain::GetOdometryY(void)
+{
+  return METER2INCH( m_odometry.GetPose().Y().value() );
+}
+double Drivetrain::GetOdometryHeading(void)
+{
+  return GetGyroYaw();
+}
 
 
 

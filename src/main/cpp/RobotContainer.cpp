@@ -10,6 +10,8 @@
 #include "commands/CmdDriveWithGamepad.h"
 #include "commands/CmdDriveClearAll.h"
 #include "commands/CmdDriveForceTurnAngle.h"
+#include "commands/CmdDriveForcePark.h"
+#include "commands/CmdPrintText.h"
 
 RobotContainer::RobotContainer() 
 {
@@ -28,7 +30,21 @@ RobotContainer::RobotContainer()
   ConfigureBindings();
 }
 
-void RobotContainer::ConfigureBindings() {}
+void RobotContainer::ConfigureBindings() 
+{
+
+
+  //Bottom Driver Mapped buttons
+  //m_botDriver_StartButton.OnTrue(new CmdDriveZeroGyro());           //Zero Gyro
+  //m_botDriver_YButton.OnTrue(new CmdDriveForceSteerAngle( 90.0));   //Straighten drive wheels
+  m_botDriver_BButton.OnTrue(new CmdDriveForcePark()); 
+  m_botDriver_AButton.OnTrue(new CmdPrintText("A-button")); 
+  m_botDriver_YButton.OnTrue(new CmdPrintText("Y-button")); 
+
+
+
+
+}
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   return frc2::cmd::Print("No autonomous command configured");

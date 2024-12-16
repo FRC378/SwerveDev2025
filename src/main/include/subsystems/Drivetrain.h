@@ -33,6 +33,7 @@ class Drivetrain : public frc2::SubsystemBase {
   void Stop( void );
 
   void ForceAllTurnAngle( double angle );
+  void ForcePark( void );
 
   //Encoders
   void ResetDriveEncoders(void);
