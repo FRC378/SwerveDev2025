@@ -128,7 +128,7 @@ void SwerveModule::Periodic()
   frc::SmartDashboard::PutNumber(m_moduleID + "-TurnAbsRaw",GetTurnEncoderAbsolutePositionRaw() );  
 
   // //Drive
-  // frc::SmartDashboard::PutNumber(m_moduleID + "-DrvVel",    GetDriveVelocity()  ); 
+  frc::SmartDashboard::PutNumber(m_moduleID + "-DrvVel",    GetDriveVelocity()  ); 
   frc::SmartDashboard::PutNumber(m_moduleID + "-DrvEnc",    GetDriveEncoderPosition() ); 
 
 

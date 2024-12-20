@@ -147,11 +147,12 @@ void Drivetrain::ResetTurnEncoders(void)
 
 
 // --- Gyro ---
+// +CCW,  -CW
 bool   Drivetrain::IsGyroConnected(void)
 {
   return m_gyro.IsConnected();
 }
-double Drivetrain::GetGyroYaw(void)            //yaw: Relative -180 to +180
+double Drivetrain::GetGyroYaw(void)            //yaw: -inf to +inf
 {
   return m_gyro.GetYaw().GetValue().value();
 }
@@ -182,7 +183,7 @@ double Drivetrain::GetOdometryY(void)
 }
 double Drivetrain::GetOdometryHeading(void)
 {
-  return GetGyroYaw();
+  return m_odometry.GetPose().Rotation().Degrees().value();    //Outputs [-180 to +180]
 }
 
 

@@ -24,7 +24,7 @@
 #define FRONTRIGHT_DRIVE_CAN_ID     21
 #define FRONTRIGHT_TURN_CAN_ID      22
 #define FRONTRIGHT_ENCODER_ID       1
-#define FRONTRIGHT_ENCODER_OFFSET   (314.1)
+#define FRONTRIGHT_ENCODER_OFFSET   (310.5)
 //-------------------------------------------
 #define BACKLEFT_DRIVE_CAN_ID       14
 #define BACKLEFT_TURN_CAN_ID        24
