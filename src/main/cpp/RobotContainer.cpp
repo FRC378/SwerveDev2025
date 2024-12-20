@@ -12,6 +12,9 @@
 #include "commands/CmdDriveForceTurnAngle.h"
 #include "commands/CmdDriveForcePark.h"
 #include "commands/CmdPrintText.h"
+#include "commands/CmdDriveTypeToggle.h"
+#include "commands/CmdDriveWithPower.h"
+#include "commands/GrpTest1.h"
 
 RobotContainer::RobotContainer() 
 {
@@ -24,6 +27,10 @@ RobotContainer::RobotContainer()
   frc::SmartDashboard::PutData( "CmdDriveClearAll",  new CmdDriveClearAll() );
   frc::SmartDashboard::PutData( "Force 0",   new CmdDriveForceTurnAngle( 0.0  ) );
   frc::SmartDashboard::PutData( "Force 90",  new CmdDriveForceTurnAngle( 90.0 ) );
+
+  frc::SmartDashboard::PutData( "DriveToggle",    new CmdDriveTypeToggle() );
+  frc::SmartDashboard::PutData( "DriveWithPower", new CmdDriveWithPower( 0.15, 20, 0) );
+  frc::SmartDashboard::PutData( "GprTest1",       new GrpTest1() );
 
 
 

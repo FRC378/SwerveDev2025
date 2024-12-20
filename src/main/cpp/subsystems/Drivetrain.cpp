@@ -41,13 +41,15 @@ void Drivetrain::Periodic()
                     {m_frontLeft.GetPosition(), m_frontRight.GetPosition(), m_backLeft.GetPosition(), m_backRight.GetPosition()});
 
 
+  //Drive Type
+  frc::SmartDashboard::PutBoolean( "DriveType", m_driveType);
+
 }
 
 
 
 void Drivetrain::Drive( double xValue, double yValue, double rValue, driveType drivetype )
 {
-
 
   //Velocity control
   units::feet_per_second_t    xSpeed = xValue * kMaxVelocity;
@@ -77,27 +79,32 @@ void Drivetrain::Drive( double xValue, double yValue, double rValue, driveType d
 
   publisher.Set(std::vector{ fl,fr,bl,br});
 
-
-/*
-  //m_RL.SetTurnMotorPower( rValue);
-  //m_RL.SetDriveMotorPower( yValue );
-
-  m_backLeft.SetDriveVelocity(  yValue * 10.0 );
-
-  double rlCurrAngle = m_backLeft.GetTurnEncoderPosition();
-
-  double rlNewAngle = rlCurrAngle + (rValue * 120);
-
-  m_backLeft.SetTurnAngle(rlNewAngle);
-*/
 }
 
+void Drivetrain::DriveWithPower( double power )
+{
+  //DriveWithPower:
+  //   Used for Velocity FeedForward Calibation
+  m_frontLeft.SetDriveMotorPower(  power );
+  m_frontRight.SetDriveMotorPower( power );
+  m_backLeft.SetDriveMotorPower(   power );
+  m_backRight.SetDriveMotorPower(  power );
 
+  //Drive Straight ahead
+  m_frontLeft.SetTurnAngle(  0 );
+  m_frontRight.SetTurnAngle( 0 );
+  m_backLeft.SetTurnAngle(   0 );
+  m_backRight.SetTurnAngle(  0 );
+
+}
 
 
 void Drivetrain::Stop( void )
 {
-
+  m_frontLeft.SetDriveMotorPower(  0 );
+  m_frontRight.SetDriveMotorPower( 0 );
+  m_backLeft.SetDriveMotorPower(   0 );
+  m_backRight.SetDriveMotorPower(  0 );
 }
 
 void Drivetrain::ForceAllTurnAngle( double angle )

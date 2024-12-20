@@ -12,6 +12,7 @@ void CmdDriveClearAll::Initialize()
   std::cout<< "CmdDriveClearAll" << std::endl;
 
 
+  robotcontainer.m_drivetrain.ZeroGyro();
   robotcontainer.m_drivetrain.ResetDriveEncoders();
   robotcontainer.m_drivetrain.ResetTurnEncoders();
   robotcontainer.m_drivetrain.ResetOdometry();

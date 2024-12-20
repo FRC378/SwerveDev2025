@@ -30,6 +30,8 @@ class Drivetrain : public frc2::SubsystemBase {
   //Drive Controls
   void Drive( double xValue, double yValue, double rValue, driveType drivetype);
 
+  void DriveWithPower( double power );
+
   void Stop( void );
 
   void ForceAllTurnAngle( double angle );
