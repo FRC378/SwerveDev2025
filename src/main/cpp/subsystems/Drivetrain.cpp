@@ -41,6 +41,10 @@ void Drivetrain::Periodic()
                     {m_frontLeft.GetPosition(), m_frontRight.GetPosition(), m_backLeft.GetPosition(), m_backRight.GetPosition()});
 
 
+  m_field.SetRobotPose(m_odometry.GetPose());
+  frc::SmartDashboard::PutData("Field", &m_field);                  
+
+
   //Drive Type
   frc::SmartDashboard::PutBoolean( "DriveType", m_driveType);
 

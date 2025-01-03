@@ -15,6 +15,7 @@
 #include "commands/CmdDriveTypeToggle.h"
 #include "commands/CmdDriveWithPower.h"
 #include "commands/GrpTest1.h"
+#include "commands/CmdLoggingToggleEnable.h"
 
 RobotContainer::RobotContainer() 
 {
@@ -32,6 +33,7 @@ RobotContainer::RobotContainer()
   frc::SmartDashboard::PutData( "DriveWithPower", new CmdDriveWithPower( 0.15, 20, 0) );
   frc::SmartDashboard::PutData( "GprTest1",       new GrpTest1() );
 
+  frc::SmartDashboard::PutData( "LogEnable",      new CmdLoggingToggleEnable() );
 
 
   ConfigureBindings();

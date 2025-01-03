@@ -16,6 +16,13 @@ void CmdDriveClearAll::Initialize()
   robotcontainer.m_drivetrain.ResetDriveEncoders();
   robotcontainer.m_drivetrain.ResetTurnEncoders();
   robotcontainer.m_drivetrain.ResetOdometry();
+
+
+  //Logging Test
+  robotcontainer.m_logging.LogMessage("This is a LogMessage!");
+  robotcontainer.m_logging.WriteComment("This is a write comment!");
+  
+
 }
 
 

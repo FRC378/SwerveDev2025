@@ -12,6 +12,7 @@
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/kinematics/SwerveDriveOdometry.h>
 #include <frc/kinematics/SwerveModulePosition.h>
+#include <frc/smartdashboard/Field2d.h>
 
 #include <ctre/phoenix6/Pigeon2.hpp>
 
@@ -90,6 +91,7 @@ class Drivetrain : public frc2::SubsystemBase {
                                             { m_frontLeft.GetPosition(),m_frontRight.GetPosition(),m_backLeft.GetPosition(),m_backRight.GetPosition()  }
                                           };
 
+  frc::Field2d m_field;
 
   ctre::phoenix6::hardware::Pigeon2 m_gyro{ PIGEON_CAN_ID, "rio"};
 

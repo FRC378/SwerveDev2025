@@ -12,6 +12,7 @@
 
 //Subsystems
 #include "subsystems/Drivetrain.h"
+#include "subsystems/Logging.h"
 
 class RobotContainer {
  public:
@@ -25,6 +26,7 @@ class RobotContainer {
 
   //****************Subsystems*******************
   Drivetrain m_drivetrain;
+  Logging    m_logging;
 
 
 

@@ -41,6 +41,7 @@ void Robot::RobotPeriodic()
 void Robot::DisabledInit() 
 {
   cout<<"DisabledInit"<<endl;
+
 }
 
 void Robot::DisabledPeriodic() 
@@ -120,6 +121,9 @@ void WriteToSmartDashboard(void)
   frc::SmartDashboard::PutNumber( "odoX",  robotcontainer.m_drivetrain.GetOdometryX() ); 
   frc::SmartDashboard::PutNumber( "odoY",  robotcontainer.m_drivetrain.GetOdometryY() ); 
   frc::SmartDashboard::PutNumber( "odoH",  robotcontainer.m_drivetrain.GetOdometryHeading() ); 
+
+  //Logging
+  frc::SmartDashboard::PutBoolean("Logging",  robotcontainer.m_logging.GetLoggingEnable() );
 
 
 }
