@@ -3,10 +3,10 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include <cmath>
-#include "commands/CmdDriveToPoint.h"
+#include "commands/CmdDriveToAbsolutePoint.h"
 #include "Robot.h"
 
-
+//   Drive to Absolute coordinate on field, with no regard to current position.
 //       
 //                         ^  +x
 //               front     |
@@ -28,7 +28,7 @@
 //  Stop:    Stop when point reached?
 //  Timeout: Seconds until timeout (0=disabled)
 //
-CmdDriveToPoint::CmdDriveToPoint( double x, double y, double heading, double speed, bool stop, double timeout) 
+CmdDriveToAbsolutePoint::CmdDriveToAbsolutePoint( double x, double y, double heading, double speed, bool stop, double timeout) 
 {
   m_finalX   = x;
   m_finalY   = y;
@@ -44,7 +44,7 @@ CmdDriveToPoint::CmdDriveToPoint( double x, double y, double heading, double spe
 }
 
 
-void CmdDriveToPoint::Initialize() 
+void CmdDriveToAbsolutePoint::Initialize() 
 {
 
   m_closeEnough = false;
@@ -58,7 +58,7 @@ void CmdDriveToPoint::Initialize()
 }
 
 
-void CmdDriveToPoint::Execute()
+void CmdDriveToAbsolutePoint::Execute()
 {
 
   //-------------------------------------
@@ -77,15 +77,23 @@ void CmdDriveToPoint::Execute()
   }
 
 
-  //Unit vectors
+ 
+  //Super simple deceleration 
+  const double MIN_SPEED      = 0.05;   //min speed value
+  const double DECEL_DISTANCE = 24.0;   //Distance (inches) to start applying slowdwon
+
+  double speed_adjust = MIN_SPEED +  m_speed * (distance / DECEL_DISTANCE);
+
+  if( speed_adjust > m_speed ) speed_adjust = m_speed;
+
+
+ //Unit vectors
   float ux = delta_x / distance;
   float uy = delta_y / distance;
 
-  //Speed adjust
-  float vx = ux * m_speed;
-  float vy = uy * m_speed;
-
-  //ToDo:  Slow down approaching coordinate.
+  //Apply vectoring
+  float vx = ux * speed_adjust;
+  float vy = uy * speed_adjust;
 
 
   //-------------------------------------
@@ -117,21 +125,21 @@ void CmdDriveToPoint::Execute()
 }
 
 
-void CmdDriveToPoint::End(bool interrupted) 
+void CmdDriveToAbsolutePoint::End(bool interrupted) 
 {
   if(m_stop)
     robotcontainer.m_drivetrain.Stop();
 }
 
 
-bool CmdDriveToPoint::IsFinished() 
+bool CmdDriveToAbsolutePoint::IsFinished() 
 {
 
 
   //Check Distance
   if( m_closeEnough )
   {
-      std::cout<<"CmdDriveToPoint: CloseEnough"<<std::endl;
+      std::cout<<"CmdDriveToAbsolutePoint: CloseEnough"<<std::endl;
       return true;
   }
 
@@ -139,7 +147,7 @@ bool CmdDriveToPoint::IsFinished()
   if ((m_timeout>0.0) && m_timer.HasElapsed( units::second_t(m_timeout) ) )
   {
       m_timer.Stop();
-      std::cout<<"CmdDriveToPoint: Timeout"<<std::endl;
+      std::cout<<"CmdDriveToAbsolutePoint: Timeout"<<std::endl;
       return true;
   }
 

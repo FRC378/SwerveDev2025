@@ -16,13 +16,13 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class CmdDriveToPoint
-    : public frc2::CommandHelper<frc2::Command, CmdDriveToPoint> {
+class CmdDriveToRelativePoint
+    : public frc2::CommandHelper<frc2::Command, CmdDriveToRelativePoint> {
  public:
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  CmdDriveToPoint( double x, double y, double heading, double speed, bool stop, double timeout );
+  CmdDriveToRelativePoint( double x, double y, double heading, double speed, bool stop, double timeout );
 
   void Initialize() override;
 
@@ -33,13 +33,18 @@ class CmdDriveToPoint
   bool IsFinished() override;
 
  private:
-  double m_finalX;
-  double m_finalY;
-  double m_finalH;
+
+  double m_inputX;
+  double m_inputY;
+  double m_inputH;
 
   double m_speed;
   bool   m_stop;
   double m_timeout;
+
+  double m_finalX;
+  double m_finalY;
+  double m_finalH;
 
   bool   m_closeEnough;
 

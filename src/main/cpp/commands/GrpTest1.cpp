@@ -9,7 +9,8 @@
 #include "commands/CmdDriveClearAll.h"
 #include "commands/CmdDriveStop.h"
 
-#include "commands/CmdDriveToPoint.h"
+#include "commands/CmdDriveToAbsolutePoint.h"
+#include "commands/CmdDriveToRelativePoint.h"
 #include "commands/CmdDriveTurnToHeading.h"
 #include "commands/CmdDriveTurnToOffsetAngle.h"
 
@@ -26,7 +27,7 @@ GrpTest1::GrpTest1()
     frc2::WaitCommand(0.25_s),
 
 
-
+/*
     CmdDriveTurnToHeading(90, 0.8),
     frc2::WaitCommand(0.1_s),
 
@@ -42,6 +43,7 @@ GrpTest1::GrpTest1()
     CmdDriveTurnToHeading(0, 0.8),
     frc2::WaitCommand(0.1_s),
 
+*/
 
 /*
   CmdDriveTurnToOffsetAngle( 45, 0.7),
@@ -71,18 +73,22 @@ GrpTest1::GrpTest1()
 
   */
 
-  // CmdDriveToPoint( 20, 0,  0, 0.5, false, 0),
-  // CmdDriveToPoint( 20, 20, 0, 0.5, false, 0),
-  // CmdDriveToPoint(  0, 20, 0, 0.5, false, 0),
-  // CmdDriveToPoint(  0, 0,  0, 0.5, true,  0),
+    CmdPrintText("Starting DriveToAbsolutePoint test"),
+    CmdDriveToAbsolutePoint( 20, 0,  0, 0.5, false, 0),
+    CmdDriveToAbsolutePoint( 20, 20, 0, 0.5, false, 0),
+    CmdDriveToAbsolutePoint(  0, 20, 0, 0.5, false, 0),
+    CmdDriveToAbsolutePoint(  0, 0,  0, 0.5, true,  0),
 
-  // CmdDriveToPoint( -40,  0,  -90,  0.5, false, 0),
-  // CmdDriveToPoint( -40, -40, -180, 0.5, false, 0),
-  // CmdDriveToPoint(  0, - 40, -270, 0.5, false, 0),
-  // CmdDriveToPoint(  0,   0,  -180, 0.5, true,  0),
+    CmdDriveToAbsolutePoint( -40,  0,  -90,  0.5, false, 0),
+    CmdDriveToAbsolutePoint( -40, -40, -180, 0.5, false, 0),
+    CmdDriveToAbsolutePoint(  0, - 40, -270, 0.5, false, 0),
+    CmdDriveToAbsolutePoint(  0,   0,  -180, 0.5, true,  0),
 
-
-    
+    CmdPrintText("Starting DriveToRelativePoint test"),
+    CmdDriveToRelativePoint(  20,   0,  0, 0.5, false, 0),
+    CmdDriveToRelativePoint(   0,  20,  0, 0.5, false, 0),
+    CmdDriveToRelativePoint( -20,   0,  0, 0.5, false, 0),
+    CmdDriveToRelativePoint(   0, -20,  0, 0.5, false, 0),
 
 
 
