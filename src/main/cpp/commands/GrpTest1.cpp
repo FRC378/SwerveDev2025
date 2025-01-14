@@ -74,14 +74,14 @@ GrpTest1::GrpTest1()
   */
 
     CmdPrintText("Starting DriveToAbsolutePoint test"),
-    CmdDriveToAbsolutePoint( 20, 0,  0, 0.5, false, 0),
-    CmdDriveToAbsolutePoint( 20, 20, 0, 0.5, false, 0),
-    CmdDriveToAbsolutePoint(  0, 20, 0, 0.5, false, 0),
-    CmdDriveToAbsolutePoint(  0, 0,  0, 0.5, true,  0),
-
+    CmdDriveToAbsolutePoint( 30, 0,  0, 0.99, false, 0),
+    CmdDriveToAbsolutePoint( 30, 30, 0, 0.99, false, 0),
+    CmdDriveToAbsolutePoint(  0, 30, 0, 0.99, false, 0),
+    CmdDriveToAbsolutePoint(  0, 0,  0, 0.99, true,  0),
+/*
     CmdDriveToAbsolutePoint( -40,  0,  -90,  0.5, false, 0),
-    CmdDriveToAbsolutePoint( -40, -40, -180, 0.5, false, 0),
-    CmdDriveToAbsolutePoint(  0, - 40, -270, 0.5, false, 0),
+    CmdDriveToAbsolutePoint( -40, -20, -180, 0.5, false, 0),
+    CmdDriveToAbsolutePoint(  0,  -20, -270, 0.5, false, 0),
     CmdDriveToAbsolutePoint(  0,   0,  -180, 0.5, true,  0),
 
     CmdPrintText("Starting DriveToRelativePoint test"),
@@ -89,7 +89,7 @@ GrpTest1::GrpTest1()
     CmdDriveToRelativePoint(   0,  20,  0, 0.5, false, 0),
     CmdDriveToRelativePoint( -20,   0,  0, 0.5, false, 0),
     CmdDriveToRelativePoint(   0, -20,  0, 0.5, false, 0),
-
+*/
 
 
     CmdPrintText("GrpTest1 Finished"),

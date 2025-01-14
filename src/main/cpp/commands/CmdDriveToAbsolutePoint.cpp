@@ -80,7 +80,7 @@ void CmdDriveToAbsolutePoint::Execute()
  
   //Super simple deceleration 
   const double MIN_SPEED      = 0.05;   //min speed value
-  const double DECEL_DISTANCE = 24.0;   //Distance (inches) to start applying slowdwon
+  const double DECEL_DISTANCE = 5.0;   //Distance (inches) to start applying slowdwon
 
   double speed_adjust = MIN_SPEED +  m_speed * (distance / DECEL_DISTANCE);
 
