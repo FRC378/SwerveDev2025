@@ -82,7 +82,7 @@ void PhotonVision::Periodic()
 
     //Status Update
     frc::SmartDashboard::PutBoolean("PV-MT Valid",  m_targetValid);
-    frc::SmartDashboard::PutBoolean("PV-MT ID",     m_targetId);
+    frc::SmartDashboard::PutNumber("PV-MT TID",     m_targetId);
     frc::SmartDashboard::PutNumber("PV-MT Yaw",     m_targetYaw  );
     frc::SmartDashboard::PutNumber("PV-MT Range",   m_targetDistance  );
 }
