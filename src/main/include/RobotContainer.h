@@ -13,7 +13,6 @@
 //Subsystems
 #include "subsystems/Drivetrain.h"
 #include "subsystems/Logging.h"
-#include "subsystems/PhotonVision.h"
 
 class RobotContainer {
  public:
@@ -28,8 +27,6 @@ class RobotContainer {
   //****************Subsystems*******************
   Drivetrain m_drivetrain;
   Logging    m_logging;
-
-  PhotonVision m_photonvision;
 
 
 
